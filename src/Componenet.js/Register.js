@@ -1,9 +1,13 @@
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Register.css";
 
 export default function Register() {
+  let navigate = useNavigate();
   let formRef = useRef();
+  let [passMatch, setPassMatch] = useState("Password Not Match");
+  let [isPassMatch, setIsPassMatch] = useState(false);
+  let [color, setColor] = useState("red");
   let [isSuccess, setIsSuccess] = useState(false);
   let [isError, setIsError] = useState(false);
   let [user, setUser] = useState({
@@ -42,10 +46,20 @@ export default function Register() {
   };
   let HandlerConfirmPasswordAction = (e) => {
     let newuser = { ...user, confirmpassword: e.target.value };
+    
+    if(e.target.value != user.password)
+    {
+      setIsPassMatch(true);
+    }else{
+      setPassMatch("Password Match"); 
+      setColor("green");
+    }
     setUser(newuser);
+
   };
   let registerAction = async () => {
     try {
+      setIsPassMatch(false);
       formRef.current.classList.add("was-validated");
       let formStatus = formRef.current.checkValidity();
       if (!formStatus) {
@@ -72,6 +86,7 @@ export default function Register() {
       formRef.current.classList.remove("was-validated");
       alert("success");
       setIsSuccess(true);
+      navigate("/Login");
     } catch (err) {
       alert(err.message);
       setIsError(true);
@@ -111,7 +126,7 @@ export default function Register() {
                     type="text"
                     placeholder="eg. Mohit"
                     required
-                    pattern="^(?![0-9]*$)[a-zA-Z0-9]{3,}$"
+                    pattern="^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z]+$"
                     className="form-control my-2 border-warning"
                     value={user.firstname}
                     onChange={HandlerFirstnameAction}
@@ -122,7 +137,7 @@ export default function Register() {
                     type="text"
                     placeholder="eg. Raut"
                     required
-                    pattern="^(?![0-9]*$)[a-zA-Z0-9]{3,}$"
+                    pattern="^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z]+$"
                     className="form-control  my-2 border-warning"
                     value={user.lastname}
                     onChange={HandlerLastnameAction}
@@ -135,7 +150,9 @@ export default function Register() {
                     className="form-control  my-2 border-warning"
                     value={user.mobno}
                     onChange={HandlerMobnoAction}
-                    pattern="^(?!91)[0-9]{10}$"
+                    minLength={10}
+                    maxLength={10}
+                    pattern="^[6789]\d{0,9}$"
                     required
                   />
                   <label htmlFor="gmail">Gmail</label>
@@ -146,6 +163,7 @@ export default function Register() {
                     value={user.gmail}
                     onChange={HandlerGmailAction}
                     required
+                    pattern="^[a-zA-Z0-9]+([.][a-zA-Z0-9]+)*@gmail\.(com|in)$"
                   />
                   <label htmlFor="password">Password</label>
                   <input
@@ -164,14 +182,16 @@ export default function Register() {
                     placeholder="eg. 1Ab@"
                     className="form-control  my-2 border-warning"
                     value={user.confirmpassword}
+                    
                     onChange={HandlerConfirmPasswordAction}
-                    required={user.password !== ""}
+                    required
+                    
                     pattern={
                       user.password !== "" ? `^${user.password}$` : undefined
                     }
                     minLength={3}
                   />
-
+                  {isPassMatch && <span style={{ color: color }}>{passMatch}</span>}
                   <div class="btndiv">
                     <input
                       type="button"

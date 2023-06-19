@@ -6,10 +6,7 @@ export default function Tax()
 {
     let navigate=useNavigate();
     let formRef=useRef();
-    let [taxInfo, setTaxInfo]=useState({fname:"", lname:"", hNumber:"", mobile:""})
-    let [userTaxDetail, setUserTaxDetail] = useState([]);
-    let [conform, setConform] = useState(true);
-    let [pay, setPay] = useState(false);
+    let [taxInfo, setTaxInfo]=useState({fname:"", lname:"", hNumber:"", mobile:"", amount:""})
     let [dis, setDis]=useState(false);
     let [house, setHouse]=useState(false);
 
@@ -30,29 +27,11 @@ export default function Tax()
         let newMobileNumber={...taxInfo, mobile:e.target.value};
         setTaxInfo(newMobileNumber);
     }
+    let changeAmount = (e) => {
+        let newAmount = { ...taxInfo, amount: e.target.value };
+        setTaxInfo(newAmount);
+      };
 
-    
-    let UserDetail= async ()=>{
-        try{
-            let url=`http://localhost:9000/readTaxPayer?number=${taxInfo.hNumber}`;
-            let res = await fetch(url);
-            
-            if(res.status != 200)
-            {
-                let serverMsg = await res.text();
-                throw new Error(serverMsg);
-            }
-
-            let list = await res.json();
-            setUserTaxDetail(list);
-            console.log(list);
-            
-        }catch(err)
-        {
-            alert("Please enter valid House Number");
-        }
-        
-    }
 
     let onPay= async ()=>{
         
@@ -64,7 +43,7 @@ export default function Tax()
             }
         
         try{
-            let url=`http://localhost:9000/addTaxUser?fname=${taxInfo.fname}&lname=${taxInfo.lname}&hNumber=${taxInfo.hNumber}&mobile=${taxInfo.mobile}`;
+            let url=`http://localhost:9000/addTaxUser?fname=${taxInfo.fname}&lname=${taxInfo.lname}&hNumber=${taxInfo.hNumber}&mobile=${taxInfo.mobile}&amount=${taxInfo.amount}`;
             let res = await fetch(url);
             if(res.status != 200)
             {
@@ -80,15 +59,14 @@ export default function Tax()
             setTimeout(()=>setDis(false),2000);
 
             formRef.current.classList.remove("was-validated");
-            navigate("/");
         }
         catch(err)
         {
             setHouse(true);
-            setTimeout(()=>setHouse(false),2000);
-            let newTaxInfo={fname:"", lname:"", hNumber:"", mobile:""};
+            setTimeout(()=>setHouse(false),5000);
+            let newTaxInfo={fname:"", lname:"", hNumber:"", mobile:"", amount:""};
             setTaxInfo(newTaxInfo);
-            alert(err.message);
+            formRef.current.classList.remove("was-validated");
         }
         
     }
@@ -145,26 +123,23 @@ export default function Tax()
                         class="form-control my-2 border-warning"
                         />
                         <span id="mmobile" class="text-danger"></span>
-                    </form>
-                    <div>
-                        <hr/>
-                    </div>
-                    <h5>Tax Detail</h5>
-
-                    {userTaxDetail.map((item)=>(<h6 key={item.id}>{item.Name}</h6>))}
-
-
-                    {conform &&   <div class="btndiv">
+                        <label htmlFor="amount">Amount</label>
                             <input
-                                type="button"
-                                value="Conform"
-                                onclick="Check()"
-                                class="btn btn-success mt-2 w-50 fs-5"
-                                onClick={UserDetail}
+                            type="text"
+                            placeholder="Amount"
+                            min={1}
+                            id="donationamount"
+                            className="form-control my-2 mb-2 border-warning"
+                            value={taxInfo.amount}
+                            onChange={changeAmount}
+                            required
+                            pattern="[0-9]+([.][0-9]{1,2})?"
+                            
                             />
-                        </div>
-                    }
-                    {pay &&    <div class="btndiv">
+                    </form>
+
+
+                        <div class="btndiv">
                                 <input
                                     type="button"
                                     value="Pay"
@@ -173,7 +148,7 @@ export default function Tax()
                                     onClick={onPay}
                                 />
                             </div>
-                    }
+                    
                     <div class="btndiv">
                         {dis && <h5 className="text-success">*** Pay Successfully ***</h5>}
                         {house && <h5 className="text-success">*** Tax Is Already Paid ***</h5>}
@@ -194,7 +169,7 @@ export default function Tax()
                         <img src="twi.jpeg" class="follow"/>
                     </div>
                     <div class="col-2">
-                        <img src="./Images/insta.jpeg" class="follow"/>
+                        <img src="insta.jpeg" class="follow"/>
                     </div>
                     <div class="col-2">
                         <img src="imdb.jpeg" class="follow"/>

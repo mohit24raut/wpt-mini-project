@@ -55,21 +55,12 @@ export default function Login() {
   return (
     <>
       <div className="container-fluid">
-        <div className="row " style={{ height: "100%" }}>
-          <div className="col-4 w-10">
-            <video
-              src="vecteezy_the-farmer-is-working-out-of-his-farm_8670264_419.mp4"//LoginSidePic1.jpg
-              autoPlay
-              loop
-              style={{
-                width: "110%",
-                height: "100%",
-                objectFit: "cover",
-              }}
-            />
-          </div>
+        <div className="row " style={{ height: "100vh" }}>
+                <div className="col-4" >
+                    <img src="LoginSidePic1.jpg" alt="" height="100%"/>
+                </div>
           <div className="col-8">
-            <div class="row align-text-center justify-content-center bg-light">
+            <div class="row align-text-center justify-content-center" style={{ height: "100vh" }}>
               <div class="col-sm-9 col-md-6 p-3 " style={{ margin: "16vh" }}>
                 <h2 id="idh111">Login</h2>
                 <form ref={formRef} className="needs-validation " novalidate>

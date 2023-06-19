@@ -1,5 +1,6 @@
 import React,{ useEffect, useState } from "react";
 import Chart from "react-apexcharts";
+import Table from "react-bootstrap/Table";
 import "./Fund.css";
 
 
@@ -9,8 +10,8 @@ function Fund() {
     let [allWaterUser, setAllWaterUser] = useState([]);
 
     useEffect(()=>{UserDetail();}, []);
-    useEffect(()=>{updateSeriesData();}, []);
     useEffect(()=>{waterUserDetail();}, []);
+
     /** Get all Tax Payer  */
     let UserDetail= async ()=>{
         try{
@@ -64,53 +65,24 @@ function Fund() {
       }, 0);
       console.log(sumWater);
 
-    const [state, setState] = useState(() => {
-      const savedState = localStorage.getItem("yourComponentState");
-      return savedState ? JSON.parse(savedState) : {
-        options: {
-          chart: {
-            id: "basic-bar",
-          },
-          xaxis: {
-            categories: ["WaterTax", "PropertyTax", "ZilaFund", "StateFund"],
-          },
-        },
-        series: [
-          {
-            name: "Amount-in-Lakhs",
-            data: [6000, 0, 7000, 10000],
-          },
-        ],
-      };
-    });
 
-    useEffect(() => {
-        const savedState = localStorage.getItem("chartState");
-        if (savedState) {
-          setState(JSON.parse(savedState));
-        }
-      }, []);
-    useEffect(() => {
-        localStorage.setItem("yourComponentState", JSON.stringify(state));
-      }, [state]);
-    
-      const updateSeriesData = () => {
-        setState(prevState => {
-          const newData = [...prevState.series[0].data];
-          newData[1] = sum;
-    
-          return {
-            ...prevState,
-            series: [
-              {
-                ...prevState.series[0],
-                data: newData,
-              },
-            ],
-          };
-        });
-      };
- 
+
+    const [state, setState] = useState({
+    options: {
+      chart: {
+        id: "basic-bar",
+      },
+      xaxis: {
+        categories: ["WaterTax", "PropertyTax", "ZilaFund", "StateFund"],
+      },
+    },
+    series: [
+      {
+        name: "Amount-in-Lakhs",
+        data: [3000, 4000, 5000, 7000],
+      },
+    ],
+  });
 
 
   return (
@@ -129,6 +101,33 @@ function Fund() {
             </div>
           </div>
         </div>
+
+        <div className="row justify-content-center">
+          <div className="col-sm-10 col-md-8">
+            <Table striped bordered hover variant="dark">
+                  <thead>
+                    <tr>
+                      <th>#Fund Name</th>
+                      <th>State Fund</th>
+                      <th>Zila Fund</th>
+                      <th>Property Tax</th>
+                      <th>Water Collection</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Amount</td>
+                      <td>70000</td>
+                      <td>50000</td>
+                      <td>{sum}</td>
+                      <td>{sumWater}</td>
+                    </tr>
+                   
+                  </tbody>
+            </Table>
+          </div>
+        </div>
+
         <div
             className="row bg-dark justify-content-center"
         >

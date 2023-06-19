@@ -49,20 +49,20 @@ export default function WaterBill() {
         throw new Error(serverMsg);
       }
 
-      let newTaxInfo = { fname: "", lname: "", meterNumber: "", mobile: "" };
+      let newTaxInfo = { fname: "", lname: "", meterNumber: "", mobile: "" , amount:""};
       setWaterBillInfo(newTaxInfo);
 
       setDis(true);
       setTimeout(() => setDis(false), 2000);
       alert("Done");
+      formRef.current.classList.remove("was-validated");
     } catch (err) {
       setHouse(true);
       setTimeout(() => setHouse(false), 5000);
-      let newTaxInfo = { fname: "", lname: "", meterNumber: "", mobile: "" };
+      let newTaxInfo = { fname: "", lname: "", meterNumber: "", mobile: "", amount:"" };
       setWaterBillInfo(newTaxInfo);
-      alert(err.message);
+      formRef.current.classList.remove("was-validated");
     }
-    navigate("/RealHome");
 
   };
   return (
@@ -81,7 +81,7 @@ export default function WaterBill() {
               <label htmlFor="fname">First Name</label>
               <input
                 type="text"
-                placeholder="First Namer"
+                placeholder="eg. Mohit"
                 required
                 id="fname"
                 value={waterBillInfo.fname}
@@ -92,7 +92,7 @@ export default function WaterBill() {
               <label htmlFor="lname">Last Name</label>
               <input
                 type="text"
-                placeholder="Last Namer"
+                placeholder="eg. Raut"
                 required
                 id="lname"
                 value={waterBillInfo.lname}
@@ -103,7 +103,7 @@ export default function WaterBill() {
               <label htmlFor="email">Meter Number</label>
               <input
                 type="text"
-                placeholder="Meter No. 10 digits"
+                placeholder="eg. 1003"
                 required
                 id="email"
                 value={waterBillInfo.meterNumber}
@@ -114,7 +114,7 @@ export default function WaterBill() {
               <label htmlFor="mobile">Mobile Number</label>
               <input
                 type="tel"
-                placeholder="Mobile No."
+                placeholder="eg. 9561227225"
                 required
                 id="mobile"
                 value={waterBillInfo.mobile}
@@ -125,7 +125,7 @@ export default function WaterBill() {
               <label htmlFor="amount">Amount</label>
                 <input
                   type="text"
-                  placeholder="Donation Amount"
+                  placeholder="Amount"
                   min={1}
                   id="donationamount"
                   className="form-control my-2 mb-2 border-warning"

@@ -1,18 +1,4 @@
-.form-hover {
-  /* Add your default styles here */
-  /* ... */
-  background-image: linear-gradient(to right, rgb(137, 201, 240) 50%, transparent 70%);
-  background-position: 100% 100%;
-  background-size: 200% 100%;
-  transition: background-position 0.3s ease; /* Define the transition property and duration */
-}
-
-.form-hover:hover {
-  background-position: 0 0;
-  color: aliceblue;
-}
-#idh1{
+.btndiv{
   display: flex;
   justify-content: center;
-  font-size: 30px;
 }

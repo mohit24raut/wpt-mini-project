@@ -1,14 +1,27 @@
 
 import "./Navbar.css";
-import {Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
+export default function Navbar() {
+  let navigate = useNavigate();
 
+  const logOutAction = () => {
+    localStorage.removeItem("loginStatus");
+    navigate("/Login", { replace: true });
+  };
 
-export default function Navbar()
-{
-    return(
-        <>
-        <nav className="navbar navbar-expand-lg" style={{ backgroundColor: "#000000" }}>
+  // Assistance of LocalStorage
+  let loginStatus = localStorage.getItem("loginStatus");
+  if (!loginStatus) {
+    return <></>;
+  }
+
+  return (
+    <>
+      <nav
+        className="navbar navbar-expand-lg"
+        style={{ backgroundColor: "#000000" }}
+      >
         <div className="container-fluid">
           <h1 className="navbar-brand gram-app fs-1" style={{ color: "coral" }}>
             Gram E-App
@@ -23,7 +36,10 @@ export default function Navbar()
             aria-label="Toggle navigation"
             style={{ color: "aliceblue" }}
           >
-            <span className="navbar-toggler-icon" style={{ backgroundColor: "coral" }}></span>
+            <span
+              className="navbar-toggler-icon"
+              style={{ backgroundColor: "coral" }}
+            ></span>
           </button>
 
           <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
@@ -32,27 +48,29 @@ export default function Navbar()
                 className="nav-link active"
                 aria-current="page"
                 to={"/RealHome"}
-                style={{ color: "aliceblue", fontWeight: "lighter", fontSize: "large" }}
+                style={{
+                  color: "aliceblue",
+                  fontWeight: "lighter",
+                  fontSize: "large",
+                }}
               >
                 Home
               </Link>
-              <Link
-                className="nav-link"
-                to={"/Login"}
-                style={{ color: "aliceblue", fontWeight: "lighter", fontSize: "large" }}
-              >
-                Log Out
-              </Link>
+
               <Link
                 className="nav-link"
                 to={"/Registration"}
-                style={{ color: "aliceblue", fontWeight: "lighter", fontSize: "large" }}
+                style={{
+                  color: "aliceblue",
+                  fontWeight: "lighter",
+                  fontSize: "large",
+                }}
               >
                 Registration
               </Link>
               <Link
                 className="nav-link"
-                to={""}
+                to={"/aboutUs"}
                 style={{
                   color: "aliceblue",
                   fontWeight: "lighter",
@@ -74,10 +92,22 @@ export default function Navbar()
               >
                 Contact Us
               </Link>
+
+              <Link
+                className="nav-link"
+                to={"/Login"}
+                style={{
+                  color: "aliceblue",
+                  fontWeight: "lighter",
+                  fontSize: "large",
+                }}
+              >
+                <input type="button" value="Log Out" className="bg-danger text-light" onClick={logOutAction}/>
+              </Link>
             </div>
           </div>
         </div>
       </nav>
-        </>
-    );
+    </>
+  );
 }

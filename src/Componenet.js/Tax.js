@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./Tax.css";
 import { useNavigate } from "react-router-dom";
 
@@ -7,8 +7,12 @@ export default function Tax()
     let navigate=useNavigate();
     let formRef=useRef();
     let [taxInfo, setTaxInfo]=useState({fname:"", lname:"", hNumber:"", mobile:""})
+    let [userTaxDetail, setUserTaxDetail] = useState([]);
+    let [conform, setConform] = useState(true);
+    let [pay, setPay] = useState(false);
     let [dis, setDis]=useState(false);
     let [house, setHouse]=useState(false);
+
 
     let changeFname=(e)=>{
         let newFname={...taxInfo, fname:e.target.value};
@@ -27,18 +31,39 @@ export default function Tax()
         setTaxInfo(newMobileNumber);
     }
 
-
     
+    let UserDetail= async ()=>{
+        try{
+            let url=`http://localhost:9000/readTaxPayer?number=${taxInfo.hNumber}`;
+            let res = await fetch(url);
+            
+            if(res.status != 200)
+            {
+                let serverMsg = await res.text();
+                throw new Error(serverMsg);
+            }
+
+            let list = await res.json();
+            setUserTaxDetail(list);
+            console.log(list);
+            
+        }catch(err)
+        {
+            alert("Please enter valid House Number");
+        }
+        
+    }
 
     let onPay= async ()=>{
-        try{
+        
             formRef.current.classList.add("was-validated");
             let formStatus = formRef.current.checkValidity();
             if (!formStatus) 
             {
                 return;
             }
-
+        
+        try{
             let url=`http://localhost:9000/addTaxUser?fname=${taxInfo.fname}&lname=${taxInfo.lname}&hNumber=${taxInfo.hNumber}&mobile=${taxInfo.mobile}`;
             let res = await fetch(url);
             if(res.status != 200)
@@ -123,24 +148,32 @@ export default function Tax()
                     </form>
                     <div>
                         <hr/>
-                        <h5>Tax Detail</h5>
-                        <ul>
-                            <li>Name: Mohit Raut</li>
-                            <li>Property Number : Mohit Raut</li>
-                            <li>Year : Mohit Raut</li>
-                            <li>Amount : Mohit Raut</li>
-                            <li className="text-danger">Due Date : Mohit Raut</li>
-                        </ul>
                     </div>
-                    <div class="btndiv">
-                        <input
-                            type="button"
-                            value="Pay"
-                            onclick="Check()"
-                            class="btn btn-success mt-2 w-50 fs-5"
-                            onClick={onPay}
-                        />
-                    </div>
+                    <h5>Tax Detail</h5>
+
+                    {userTaxDetail.map((item)=>(<h6 key={item.id}>{item.Name}</h6>))}
+
+
+                    {conform &&   <div class="btndiv">
+                            <input
+                                type="button"
+                                value="Conform"
+                                onclick="Check()"
+                                class="btn btn-success mt-2 w-50 fs-5"
+                                onClick={UserDetail}
+                            />
+                        </div>
+                    }
+                    {pay &&    <div class="btndiv">
+                                <input
+                                    type="button"
+                                    value="Pay"
+                                    onclick="Check()"
+                                    class="btn btn-success mt-2 w-50 fs-5"
+                                    onClick={onPay}
+                                />
+                            </div>
+                    }
                     <div class="btndiv">
                         {dis && <h5 className="text-success">*** Pay Successfully ***</h5>}
                         {house && <h5 className="text-success">*** Tax Is Already Paid ***</h5>}

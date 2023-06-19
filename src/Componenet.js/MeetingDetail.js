@@ -25,7 +25,7 @@ export default function MeetingInfo()
 
                         <div className="row ">
                             <div className="col-12 editBtn"> 
-                                <a href="http://127.0.0.1:5500/AgendaWrite.html" title="Edit">
+                                <a href="" title="Edit">
                                     <input 
                                         type="button" 
                                         value="&#9998;"

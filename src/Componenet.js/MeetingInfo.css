@@ -48,7 +48,7 @@ table, th, td, tr{
 
 
 tr:nth-child(even){
-    background-color: aqua;
+    background-color: rgb(179, 239, 239);
 }
 tr:nth-child(odd){
     background-color: lightgray;
